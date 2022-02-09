@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fanshr.step.dao.InterviewCategoryDao">
+
+
+    <select id="queryList" resultType="com.fanshr.step.entity.InterviewCategory">
+        select id,
+        title,
+        description,
+        show_order,
+        is_disable,
+        remark,
+        parent_id,
+        module_id,
+        uuid,
+        creator_id,
+        create_date,
+        create_time,
+        create_at,
+        modifier_id,
+        modify_date,
+        modify_time,
+        modify_at
+        from tmp_interview_category
+        <where>
+            <if test="interviewCategoryCondition.Id!=null">
+                and parent_id is null
+            </if>
+            <if test="interviewCategoryCondition.description!=null">
+                and parent_id is not null
+            </if>
+            <if test="interviewCategoryCondition.parentId!=null">
+                and parent_id = #{interviewCategoryCondition.parentId}
+            </if>
+        </where>
+        order by show_order,create_at desc,modify_at desc
+
+
+    </select>
+    <select id="queryOne" resultType="com.fanshr.step.entity.InterviewCategory">
+        select id,
+        title,
+        description,
+        show_order,
+        is_disable,
+        remark,
+        parent_id,
+        module_id,
+        uuid,
+        creator_id,
+        create_date,
+        create_time,
+        create_at,
+        modifier_id,
+        modify_date,
+        modify_time,
+        modify_at
+        from tmp_interview_category
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        insert into tmp_interview_category(title, description, show_order, is_disable, remark, parent_id, module_id,
+                                           UUID, creator_id, create_date, create_time, create_at, modifier_id,
+                                           modify_date, modify_time, modify_at)
+        values (#{title}, #{description},#{showOrder}, #{isDisable}, #{remark},
+                #{parentId}, #{moduleId}, #{uuid}, #{creatorId}, #{createDate}, #{createTime}, #{createAt},
+                #{modifierId},#{modifyDate}, #{modifyTime}, #{modifyAt})
+    </insert>
+
+
+    <update id="update" parameterType="com.fanshr.step.entity.InterviewCategory">
+        update tmp_interview_category
+        <set>
+            <if test="title!=null">title=#{title},</if>
+            <if test="description!=null">description=#{description},</if>
+            <if test="remark!=null">remark=#{remark},</if>
+            <if test="showOrder!=null">show_order=#{showOrder},</if>
+            <if test="modifyAt!=null">modify_at=#{modifyAt},</if>
+            <if test="parentId!=null">parent_id=#{parentId}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="delete">
+        delete
+        from tmp_interview_category
+        where id = #{id}
+    </delete>
+    <delete id="batchDelete" parameterType="int">
+        delete from tmp_interview_category where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

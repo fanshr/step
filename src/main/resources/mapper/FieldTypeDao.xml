@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fanshr.step.dao.FieldTypeDao">
+
+
+    <select id="queryList" resultType="com.fanshr.step.entity.FieldType">
+        select id, field1, field2, field3
+        from tmp_field_test
+    </select>
+    <select id="queryOne" resultType="com.fanshr.step.entity.FieldType">
+        select id, field1, field2, field3
+        from tmp_field_test
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        insert into tmp_field_test(field1, field2, field3)
+        values (#{field1}, #{field2}, #{field3})
+    </insert>
+
+
+    <select id="queryAdvance" resultType="com.fanshr.step.entity.FieldType">
+
+    </select>
+    <select id="queryByTitle1" resultType="com.fanshr.step.entity.FieldType">
+        select id,title from tmp_field_test
+        <where>
+            <if test="title!=null and title!=''">
+                title=#{title}
+            </if>
+        </where>
+    </select>
+    <select id="queryByTitle2" resultType="com.fanshr.step.entity.FieldType">
+        select id,title from tmp_field_test
+        <where>
+            <if test="title!=null and title!=''">
+                title=#{title}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByTitle3" resultType="com.fanshr.step.entity.FieldType">
+        select id,title from tmp_field_test
+        <where>
+            <if test="str!=null and str!=''">
+                title=#{str}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByTitle4" resultType="com.fanshr.step.entity.FieldType">
+        select id,title from tmp_field_test
+        <where>
+            <if test="str!=null and str!=''">
+                title=#{str}
+            </if>
+        </where>
+    </select>
+    <select id="queryByTitle5" resultType="com.fanshr.step.entity.FieldType">
+        select id,title from tmp_field_test
+        <where>
+            <if test="title!=null and title!=''">
+                title=#{title}
+            </if>
+        </where>
+    </select>
+    <select id="queryByTitle6" resultType="com.fanshr.step.entity.FieldType">
+        select id,title from tmp_field_test
+        <where>
+            <if test="_parameter!=null and _parameter!=''">
+                title=#{title}
+            </if>
+        </where>
+    </select>
+    <select id="queryByTitle7" resultType="com.fanshr.step.entity.FieldType">
+        select id, title
+        from tmp_field_test
+        where title = #{str}
+    </select>
+    <select id="queryByCreatorId" resultType="com.fanshr.step.entity.FieldType">
+        select id,title from tmp_field_test
+        <where>
+            <if test="creatorId!=null and creatorId!=''">
+                creator_id=#{creatorId}
+            </if>
+        </where>
+    </select>
+    <select id="queryByCreatorIdAndRemark1" resultType="com.fanshr.step.entity.FieldType">
+        select id, title
+        from tmp_field_test
+        where creator_id = #{creatorId}
+          and remark = #{remark}
+    </select>
+    <select id="queryByCreatorIdAndRemark2" resultType="com.fanshr.step.entity.FieldType">
+        select id,title from tmp_field_test
+        <where>
+            <if test="creatorId!=null and creatorId > 0">
+                and creator_id=#{creatorId}
+            </if>
+            <if test="remark != null and remark !=''">
+                and remark = #{remark}
+            </if>
+        </where>
+    </select>
+    <select id="queryByCreatorIdAndRemark3" resultType="com.fanshr.step.entity.FieldType">
+        select id, title
+        from tmp_field_test
+        where creator_id = #{param1}
+          and remark = #{param2}
+    </select>
+    <select id="queryByCreatorIdAndRemark4" resultType="com.fanshr.step.entity.FieldType">
+        select id, title
+        from tmp_field_test
+        <where>
+            <if test="param1!=null and param1 > 0">
+                and creator_id=#{param1}
+            </if>
+            <if test="param2 != null and param2 !=''">
+                and remark = #{param2}
+            </if>
+        </where>
+    </select>
+    <select id="queryByCreatorIdAndRemark5" resultType="com.fanshr.step.entity.FieldType">
+        select id, title
+        from tmp_field_test
+        <where>
+            <if test="creatorId!=null and creatorId > 0">
+                and creator_id=#{creatorId}
+            </if>
+            <if test="remark != null and remark !=''">
+                and remark = #{remark}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="queryByIds1" resultType="com.fanshr.step.entity.FieldType">
+        select id,title,remark,tags from tmp_field_test
+        <where>
+            <if test="ids!=null and ids!=''">
+                id in
+                <foreach collection="ids.split(',')" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="queryByIds2" resultType="com.fanshr.step.entity.FieldType">
+        select id,title,remark,tags from tmp_field_test
+        <where>
+            <if test="ids!=null and ids!=''">
+                id in (${ids})
+            </if>
+        </where>
+    </select>
+
+    <select id="queryById" resultType="com.fanshr.step.entity.FieldType">
+        select id,title,remark,tags from tmp_field_test
+        <where>
+            <if test="id!=null and id >0">
+                id=#{id}
+            </if>
+        </where>
+    </select>
+    <select id="queryByRemark" resultType="com.fanshr.step.entity.FieldType">
+        select id,title,remark,tags from tmp_field_test
+        <where>
+            <if test="value!=null and value !=''">
+                and remark=#{value}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="queryByFuzzy" resultType="com.fanshr.step.entity.FieldType">
+        select id,title,remark,tags from tmp_field_test
+        <where>
+            <if test="keywords!=null and keywords!=''">
+                and
+                <foreach collection="keywords.split(',')" index="index" item="item" open="(" separator="OR" close=")">
+                    remark like concat('%',#{item},'%')
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <!--使用${}存在注入风险，因此修正使用下面的实现-->
+    <!--<select id="queryBytags" resultType="com.fanshr.step.entity.FieldType">-->
+    <!--    select id,title,remark,tags from tmp_field_test-->
+    <!--    <where>-->
+    <!--        <if test="tags!=null and tags!=''">-->
+    <!--            and-->
+    <!--            <foreach collection="tags.split(',')" index="index" item="item" open="(" separator="OR" close=")">-->
+    <!--                INSTR(tags,',${item},')>0-->
+    <!--            </foreach>-->
+    <!--        </if>-->
+    <!--    </where>-->
+    <!--</select>-->
+
+    <!-- 该方式仍然存在严重的bug，针对tags只存在单个值，或者id存在于行首或者行末的情况会查询缺失
+    如果坚持使用如下方法，可以考虑，对存值的情况做特殊处理，进行行首和行尾的逗号包裹
+    一般而言该方式不用于针对id的情况，往往用于批量的模糊查询的使用，更多情况下，使用fetcch_intset
+    -->
+    <!--<select id="queryBytags" resultType="com.fanshr.step.entity.FieldType">-->
+    <!--    select id,title,remark,tags from tmp_field_test-->
+    <!--    <where>-->
+    <!--        <if test="tags!=null and tags!=''">-->
+    <!--            and-->
+    <!--            <foreach collection="tags.split(',')" index="index" item="item" open="(" separator="OR" close=")">-->
+    <!--                INSTR(tags,concat(',',#{item},','))>0-->
+    <!--            </foreach>-->
+    <!--        </if>-->
+    <!--    </where>-->
+    <!--</select>-->
+
+    <select id="queryBytags" resultType="com.fanshr.step.entity.FieldType">
+        select id,title,remark,tags from tmp_field_test
+        <where>
+            <if test="tags!=null and tags!=''">
+                and
+                <foreach collection="tags.split(',')" index="index" item="item" open="(" separator="OR" close=")">
+                    find_in_set(#{item},tags)
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="resultMap1" type="com.fanshr.step.entity.FieldType">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="remark" property="remark"/>
+        <result column="creator_id" property="creatorId"/>
+        <collection property="interviewTagList" javaType="java.util.ArrayList" ofType="com.fanshr.step.entity.InterviewTag">
+            <id column="tag_id" property="id"/>
+            <result column="tag_title" property="title"/>
+            <result column="show_order" property="showOrder"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryListByMap1" resultMap="resultMap1">
+        select t0.id, t0.description, t0.remark, t0.creator_id, t1.id as tag_id, t1.title as tag_title, t1.show_order
+        from tmp_field_test t0
+                 left join tmp_interview_tag t1
+                           on find_in_set(t1.id, t0.tags)
+        where t0.tags is not null
+    </select>
+    
+    <resultMap id="resultMap2" type="com.fanshr.step.entity.FieldType">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="remark" property="remark"/>
+        <result column="creator_id" property="creatorId"/>
+        <collection property="interviewTagList" javaType="java.util.ArrayList" ofType="com.fanshr.step.entity.InterviewTag"
+        select="com.fanshr.step.dao.InterviewTagDao.queryByIds" column="{ids = tags}"/>
+    </resultMap>
+    <select id="queryListByMap2" resultMap="resultMap2">
+        select id ,title,description,remark,creator_id,tags from tmp_field_test where tags is not null
+    </select>
+
+
+</mapper>
