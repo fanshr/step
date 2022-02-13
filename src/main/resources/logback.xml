@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<configuration debug="false">
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
     <appender name="INFO-FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.base}/webapps/step/logs/info/info.log</file>
+        <file>${logback.home}/info/info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/webapps/step/logs/info/info.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <fileNamePattern>${logback.home}/info/info.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>1024MB</maxFileSize>
@@ -20,9 +20,11 @@
     <appender name="ACCESS-FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>
-            ${catalina.base}/webapps/step/logs/access/access.log</file>
+            ${logback.home}/access/access.log
+        </file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${catalina.base}/webapps/step/logs/access/access.%d{yyyy-MM-dd}.%i.log.zip</FileNamePattern>
+            <FileNamePattern>${logback.home}/access/access.%d{yyyy-MM-dd}.%i.log.zip
+            </FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>1024MB</maxFileSize>
@@ -35,10 +37,35 @@
             </pattern>
         </layout>
     </appender>
-    <logger name="com.fanshr.step" level="DEBUG" additivity="false">
-        <appender-ref ref="ACCESS-FILE" />
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">　　　　　
+        <encoder>　　　　　　　　　
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>　　　　
+        </encoder>　
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${logback.home}/error/step_error.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <logger name="com.fanshr.step" level="info" additivity="true">
+        <appender-ref ref="FILE"/>
     </logger>
     <root level="INFO">
-        <appender-ref ref="INFO-FILE" />
+        <appender-ref ref="STDOUT"/>　　　
     </root>
+    <!--<root level="INFO">-->
+    <!--    <appender-ref ref="INFO-FILE" />-->
+    <!--</root>-->
 </configuration>
+
+
+<!--文件目的地位置  windows /代表C盘或者容器软件部署的目录所在磁盘  ./ 代表容器下的默认位置，以tomcat为例 为tomcat/bin/
+绝对位置，或者使用动态变量的形式来处理${catalina.base}/webapps/step/logs/info/info.log
+-->

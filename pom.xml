@@ -209,11 +209,29 @@
       <version>1.2.76</version>
     </dependency>
 
+    <!--    导入pagehelper的包-->
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper</artifactId>
+      <version>5.3.0</version>
+    </dependency>
+
+
+
 
   </dependencies>
 
   <build>
   <finalName>step</finalName>
+
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+    </resources>
   <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
     <plugins>
 

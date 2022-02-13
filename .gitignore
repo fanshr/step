@@ -28,7 +28,8 @@ hs_err_pid*
 ### Maven template
 target/
 target/*
-
+logs/
+logs/*
 .idea
 *.iml
 out
