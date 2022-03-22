@@ -12,10 +12,13 @@
         from tmp_interview_tag
         <where>
             <if test="condition.title!=null and condition.title!=''">
-                and title like concat('%',#{condition.title},'%')
+                and lower(replace(title,' ','')) like concat('%',#{condition.title},'%')
             </if>
-            <if test="condition.description!=null and condition.title!=''">
-                and description like concat('%',#{condition.description},'%')
+            <if test="condition.description!=null and condition.description!=''">
+                and lower(replace(description,' ','')) like concat('%',#{condition.description},'%')
+            </if>
+            <if test="condition.id!=null and condition.id>0">
+                and id != #{condition.id}
             </if>
         </where>
         order by show_order,create_at desc,modify_at desc
@@ -39,6 +42,9 @@
                 <foreach collection="ids.split(',')" item="item" index="index" open="(" separator="," close=")">
                     #{item}
                 </foreach>
+            </if>
+            <if test="ids==null or ids==''">
+                1=2
             </if>
         </where>
 

@@ -22,7 +22,6 @@ public class TagDaoTest extends BaseTest {
   public void test26(){
       List<Tag> tags = tagdao.queryByIds("2,3,6");
       System.out.println(JSON.toJSONString(tags));
-
   }
 }
 

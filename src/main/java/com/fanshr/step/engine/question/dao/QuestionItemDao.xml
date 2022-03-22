@@ -48,10 +48,10 @@
         from tmp_interview_item
         <where>
             <if test="condition.title!=null">
-                and title like concat('%',#{condition.title},'%')
+                and lower(replace(title,' ','')) like concat('%',#{condition.title},'%')
             </if>
             <if test="condition.description!=null">
-                and description like concat('%',#{condition.description},'%')
+                and lower(replace(description,' ','')) like concat('%',#{condition.description},'%')
             </if>
             <if test="condition.remark!=null">
                 and remark like concat('%',#{condition.remark},'%')
@@ -79,41 +79,37 @@
         FROM
         tmp_interview_item
         <where>
-            <if test="condition.title!=null">
-                and title like concat('%',#{condition.title},'%')
+            <if test="condition.title!=null and condition.title != ''">
+                and lower(replace(title,' ','')) like concat('%',#{condition.title},'%')
             </if>
-            <if test="condition.description!=null">
-                and description like concat('%',#{condition.description},'%')
+            <if test="condition.description!=null and condition.description!=''">
+                and lower(replace(description,' ','')) like concat('%',#{condition.description},'%')
             </if>
-            <if test="condition.remark!=null">
+            <if test="condition.remark!=null and condition.remark!=''">
                 and remark like concat('%',#{condition.remark},'%')
             </if>
-            <if test="condition.answer!=null">
+            <if test="condition.answer!=null and condition.answer!=''">
                 and answer like concat('%',#{condition.answer},'%')
             </if>
-            <if test="condition.categoryId!=null">
+            <if test="condition.categoryId!=null and condition.categoryId>0">
                 and category_id = #{condition.categoryId}
             </if>
-            <if test="condition.tags!=null">
+            <if test="condition.tags!=null and condition.tags!=''">
                 and
                 <foreach collection="condition.tags.split(',')" index="index" item="item" open="(" separator="OR"
                          close=")">
                     find_in_set(${item},tags)
                 </foreach>
             </if>
+            <if test="condition.id!=null and condition.id>0">
+                and id != #{condition.id}
+            </if>
         </where>
     </select>
 
 
     <select id="queryOne" resultMap="itemMap" parameterType="Integer">
-        SELECT id,
-               title,
-               description,
-               remark,
-               answer,
-               show_order,
-               create_at,
-               modify_at
+        SELECT id,title,description,remark,answer,show_order,create_at,modify_at,category_id,tags
         FROM tmp_interview_item
         WHERE id = #{id}
     </select>
@@ -122,10 +118,10 @@
         from tmp_interview_item
         <where>
             <if test="condition.title!=null and condition.title!=''">
-                and title like concat('%',#{condition.title},'%')
+                and lower(replace(title,' ','')) like concat('%',#{condition.title},'%')
             </if>
             <if test="condition.description!=null and condition.description!=''">
-                and description like concat('%',#{condition.description},'%')
+                and lower(replace(description,' ','')) like concat('%',#{condition.description},'%')
             </if>
             <if test="condition.remark!=null and condition.remark!=''">
                 and remark like concat('%',#{condition.remark},'%')
@@ -136,15 +132,19 @@
             <if test="condition.categoryId!=null">
                 and category_id = #{condition.categoryId}
             </if>
-            <if test="condition.tags!=null and tags!=''">
+            <if test="condition.id!=null and condition.id>0">
+                and id != #{condition.id}
+            </if>
+            <if test="condition.tags!=null and condition.tags!=''">
                 and
                 <foreach collection="condition.tags.split(',')" index="index" item="item" open="(" separator="OR"
                          close=")">
                     find_in_set(${item},tags)
                 </foreach>
             </if>
+
         </where>
-        order by show_order
+order by show_order
 
     </select>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">

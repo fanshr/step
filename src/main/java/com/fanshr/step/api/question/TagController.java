@@ -10,8 +10,11 @@ import com.fanshr.step.engine.common.enums.StateEnum;
 import com.fanshr.step.engine.question.service.TagService;
 import com.fanshr.step.engine.common.utils.ParamUtil;
 import com.fanshr.step.engine.common.utils.ResultUtil;
+import com.fanshr.step.engine.question.utils.StringUtil;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +34,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/question/tag/")
+@Slf4j
 public class TagController {
-    private static final Logger logger = LoggerFactory.getLogger(TagController.class);
+    // private static final Logger log = LoggerFactory.getLogger(TagController.class);
 
 
     @Autowired
     private TagService tagService;
 
     @GetMapping("getAll")
-    public Result<PageBean> getAll(String title, String description) {
+    public Result<PageBean> getAll(String title, String description,Integer id) {
         PageBean pageBean = new PageBean();
         try {
             Tag condition = new Tag();
-            condition.setTitle(title);
-            condition.setDescription(description);
+            condition.setTitle(StringUtil.toCondition(title));
+            condition.setDescription(StringUtil.toCondition(description));
+            condition.setId(id);
             List<Tag> tagList = tagService.get(condition);
             pageBean.setList(tagList);
             pageBean.setTotal(tagList.size());
@@ -53,6 +58,11 @@ public class TagController {
             return ResultUtil.error(e.toString());
         }
     }
+
+    // @GetMapping("checkRepeat")
+    // public Result checkRepeat(String title) {
+    //
+    // }
 
 
 

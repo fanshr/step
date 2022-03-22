@@ -1,6 +1,5 @@
 package com.fanshr.step.api.question;
 
-import com.fanshr.step.engine.common.dto.DataConstant;
 import com.fanshr.step.engine.common.dto.Execution;
 import com.fanshr.step.engine.common.dto.PageBean;
 import com.fanshr.step.engine.common.dto.Result;
@@ -10,7 +9,7 @@ import com.fanshr.step.engine.common.enums.StateEnum;
 import com.fanshr.step.engine.question.service.QuestionItemService;
 import com.fanshr.step.engine.common.utils.ParamUtil;
 import com.fanshr.step.engine.common.utils.ResultUtil;
-import com.fasterxml.jackson.databind.JavaType;
+import com.fanshr.step.engine.question.utils.StringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,52 +38,50 @@ public class QuestionItemController {
     private QuestionItemService questionItemService;
 
     @GetMapping("getAll")
-    public Result<PageBean> get(HttpServletRequest request) {
+    public Result<PageBean> get(String title, String description, Integer id) {
         PageBean pageBean = new PageBean();
-        int pageIndex = ParamUtil.getInt(request, DataConstant.CURRENT);
-        int pageSize = ParamUtil.getInt(request, DataConstant.PAGE_SIZE);
-        if (pageIndex > 0 && pageSize > 0) {
-            QuestionItem condition = new QuestionItem();
-            // int categoryId = ParamUtil.getInt(request, "categoryId");
-            // if (categoryId > 0) {
-            //     condition.setCategoryId(categoryId);
-            // }
-            // String tags = ParamUtil.getString(request, "tags");
-            // if (tags != null) {
-            //     condition.setTags(tags);
-            // }
 
-            try {
-                Execution execution = questionItemService.get(condition, pageIndex, pageSize);
-                if (execution.getState() == StateEnum.SUCCESS.getState()) {
-                    pageBean.setList(execution.getList());
-                    pageBean.setTotal(execution.getTotal());
-                    return ResultUtil.success(pageBean);
-                } else {
-                    return ResultUtil.error(execution.getStateInfo());
-                }
-            } catch (Exception e) {
-                return ResultUtil.error(e.toString());
+        QuestionItem condition = new QuestionItem();
+        // int categoryId = ParamUtil.getInt(request, "categoryId");
+        // if (categoryId > 0) {
+        //     condition.setCategoryId(categoryId);
+        // }
+        // String tags = ParamUtil.getString(request, "tags");
+        // if (tags != null) {
+        //     condition.setTags(tags);
+        // }
+        try {
+            condition.setTitle(StringUtil.toCondition(title));
+            condition.setDescription(StringUtil.toCondition(description));
+            condition.setId(id);
+            Execution execution = questionItemService.get(condition);
+            if (execution.getState() == StateEnum.SUCCESS.getState()) {
+                pageBean.setList(execution.getList());
+                pageBean.setTotal(execution.getTotal());
+                return ResultUtil.success(pageBean);
+            } else {
+                return ResultUtil.error(execution.getStateInfo());
             }
-
-
-        } else {
-            return ResultUtil.error(ErrorCode.INDEX_IS_NULL);
+        } catch (Exception e) {
+            return ResultUtil.error(e.toString());
         }
+
 
     }
 
     @PostMapping("list")
     public Result<PageBean> list(@RequestBody QuestionItem condition,
-                                 @RequestParam(required = true,defaultValue = "1") Integer current,
-                                 @RequestParam(required = true,defaultValue = "10") Integer pageSize) {
-        logger.info("关键参数-->{}--{}--{}",current,pageSize,condition);
+                                 @RequestParam(required = true, defaultValue = "1") Integer current,
+                                 @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
+        logger.info("关键参数-->{}--{}--{}", current, pageSize, condition);
 
         try {
+            condition.setTitle(StringUtil.toCondition(condition.getTitle()));
+            condition.setDescription(StringUtil.toCondition(condition.getDescription()));
             Execution execution = questionItemService.list(condition, current, pageSize);
-            if (execution.getState()==StateEnum.SUCCESS.getState()){
+            if (execution.getState() == StateEnum.SUCCESS.getState()) {
                 return ResultUtil.success(new PageBean(execution.getList(), execution.getTotal()));
-            }else{
+            } else {
                 return ResultUtil.error(execution.getStateInfo());
             }
         } catch (Exception e) {
@@ -176,18 +173,10 @@ public class QuestionItemController {
 
 
     @PostMapping("multiRemove")
-    public Result multiRemove(String interviewItemIdListStr) {
-        ObjectMapper mapper = new ObjectMapper();
-        JavaType javaType = mapper.getTypeFactory().constructParametricType(ArrayList.class, Integer.class);
+    public Result multiRemove(@RequestBody Integer[] idList) {
 
-        List<Integer> interviewItemIdList = null;
 
-        try {
-            interviewItemIdList = mapper.readValue(interviewItemIdListStr, javaType);
-        } catch (IOException e) {
-
-            return ResultUtil.error(ErrorCode.INVALID_PARAM, e.toString());
-        }
+        List<Integer> interviewItemIdList = Arrays.asList(idList);
 
         if (interviewItemIdList != null && interviewItemIdList.size() > 0) {
             Execution execution =

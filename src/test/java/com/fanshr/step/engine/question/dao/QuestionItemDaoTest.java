@@ -3,12 +3,16 @@ package com.fanshr.step.engine.question.dao;
 import com.alibaba.fastjson.JSON;
 import com.fanshr.step.engine.BaseTest;
 import com.fanshr.step.engine.question.entity.QuestionItem;
+import com.github.pagehelper.Page;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author : LiuYJ
@@ -64,5 +68,47 @@ public class QuestionItemDaoTest extends BaseTest {
         condition.setModifyAt(new Date());
         int effectedRows = questionItemDao.update(condition);
         Assert.assertEquals(1,effectedRows);
+    }
+
+
+    @Test
+    public void testRemark(){
+
+        QuestionItem condition = new QuestionItem();
+        QuestionItem questionItem = questionItemDao.queryOne(2501);
+        String title = questionItem.getTitle();
+
+        String remark = generateRemark(title);
+        System.out.println(remark);
+        // questionItem.setRemark();
+
+    }
+
+    @Test
+    // public void test87(){
+    //     QuestionItem condition = new QuestionItem();
+    //     Page<QuestionItem> list = questionItemDao.list(condition);
+    //     for (QuestionItem questionItem : list) {
+    //         questionItem.setRemark(generateRemark(questionItem.getTitle()));
+    //         questionItemDao.update(questionItem);
+    //     }
+    //
+    //
+    //
+    //
+    // }
+
+    private String generateRemark(String title) {
+        String pattern = "[^\\.\\d\\s]";
+        Pattern regex = Pattern.compile(pattern);
+        Matcher matcher = regex.matcher(title);
+        int start = 0;
+        if (matcher.find()) {
+            start = matcher.start();
+
+
+        }
+        return title.substring(start).trim();
+
     }
 }

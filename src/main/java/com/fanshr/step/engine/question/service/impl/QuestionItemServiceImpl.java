@@ -39,9 +39,8 @@ public class QuestionItemServiceImpl implements QuestionItemService {
     }
 
     @Override
-    public Execution get(QuestionItem condition, int pageIndex, int pageSize) {
-        int rowIndex = PageUtil.calculateRowIndex(pageIndex, pageSize);
-        List<QuestionItem> questionItemList = questionItemDao.queryList(condition, rowIndex, pageSize);
+    public Execution get(QuestionItem condition) {
+        List<QuestionItem> questionItemList = questionItemDao.list(condition);
         int count = questionItemDao.queryCount(condition);
         if (questionItemList != null) {
             return new Execution(questionItemList, count);

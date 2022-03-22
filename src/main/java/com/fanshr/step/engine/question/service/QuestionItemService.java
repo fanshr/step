@@ -16,7 +16,7 @@ public interface QuestionItemService {
 
     public Execution list(QuestionItem condition, int current, int pageSize);
 
-    Execution get(QuestionItem condition, int pageIndex, int pageSize);
+    Execution get(QuestionItem condition);
     QuestionItem get(Integer id);
 
     Execution add(QuestionItem questionItem);

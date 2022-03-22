@@ -55,6 +55,7 @@ public class CategoryController {
             condition.setParentId(parentId);
             List<Category> categoryList = categoryService.get(condition);
 
+
             pageBean.setList(categoryList);
             pageBean.setTotal(categoryList.size());
             return ResultUtil.success(pageBean);
