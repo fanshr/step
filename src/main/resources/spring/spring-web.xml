@@ -116,5 +116,11 @@
     <!--              class="com.fanshr.step.interceptor.superadmin.SuperAdminLoginInterceptor" />-->
     <!--    </mvc:interceptor>-->
 
+    <!--将你的SwaggerConfig配置类注入-->
+    <bean class="com.fanshr.step.engine.common.config.SwaggerConfig"/>
+    <!--配置swagger资源不被拦截-->
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
+
     <!--</mvc:interceptors>-->
 </beans>
