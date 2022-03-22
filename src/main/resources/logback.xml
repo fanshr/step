@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--<property name="logback.home" value="../logs/step/logs/"></property>-->
+    <define name="logback.home" class="com.fanshr.step.engine.common.config.LogHomeProperty" />
     <appender name="INFO-FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logback.home}/info/info.log</file>
