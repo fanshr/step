@@ -19,14 +19,35 @@
     <!--    </property>-->
     <!--    <property name="fileEncoding" value="UTF-8" />-->
     <!--</bean>-->
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!--<context:property-placeholder location="classpath:jdbc.properties"/>-->
+    <bean class="com.fanshr.step.engine.common.dao.split.EncryptPropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:jdbc.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="UTF-8"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <!--另一种实现加密的方式，待测试-->
+    <!--<bean id="placeholderConfigurer"-->
+    <!--      class="com.fanshr.step.engine.common.dao.split.DBPropertyPlaceholderConfigurer">-->
+    <!--    <property name="locations" value="classpath:jdbc.properties" />-->
+    <!--    <property name="encryptedProperties">-->
+    <!--        <array>-->
+    <!--            <value>jdbc.username</value>-->
+    <!--            <value>jdbc.password</value>-->
+    <!--        </array>-->
+    <!--    </property>-->
+    <!--</bean>-->
+    <!--<context:property-placeholder location="classpath:jdbc.properties" ignore-resource-not-found="true"/>-->
+
+
     <!-- 2.数据库连接池 -->
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <!-- 配置连接池属性 -->
-        <property name="driverClass" value="${jdbc.driver}"/>
-        <property name="jdbcUrl" value="${jdbc.url}"/>
-        <property name="user" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
+    <bean id="abstractDataSource"  abstract="true" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+
 
         <!-- c3p0连接池的私有属性 -->
         <property name="maxPoolSize" value="10"/>
@@ -55,6 +76,35 @@
  测试的表必须在初始数据源的时候就存在。Default: null-->
         <!--<property name="preferredTestQuery" value="select id from tmp_interview_item where id=1"/>-->
 
+    </bean>
+    <bean id="master" parent="abstractDataSource">
+        <!-- 配置连接池属性 -->
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.master.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <bean id="slave" parent="abstractDataSource">
+        <!-- 配置连接池属性 -->
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.slave.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <!-- 配置动态数据源，targetDataSources 即路由数据源所对应的名称-->
+    <bean id="dynamicDataSource" class="com.fanshr.step.engine.common.dao.split.DynamicDataSource">
+        <property name="targetDataSources">
+            <map>
+                <entry value-ref="master" key="master"/>
+                <entry value-ref="slave" key="slave"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+        <property name="targetDataSource">
+            <ref bean="dynamicDataSource"/>
+        </property>
     </bean>
 
     <!-- 3.配置SqlSessionFactory对象 -->

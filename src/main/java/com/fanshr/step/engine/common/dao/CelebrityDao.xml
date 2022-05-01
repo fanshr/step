@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fanshr.step.engine.common.dao.CelebrityDao">
+
+
+    <select id="queryList" resultType="com.fanshr.step.engine.common.entity.Celebrity">
+        select id,
+               lastname,
+               sex,
+               nationality_id,
+               birthday,
+               death_day,
+               age,
+               summary,
+               details,
+               biography,
+               remark,
+               show_order,
+               canceled,
+               uuid,
+               creator_id,
+               create_date,
+               create_time,
+               create_at,
+               modifier_id,
+               modify_date,
+               modify_time,
+               modify_at
+        from set_celebrity
+
+        order by show_order, create_at desc, modify_at desc
+
+
+    </select>
+    <select id="queryOne" resultType="com.fanshr.step.engine.common.entity.Celebrity">
+        select id,
+        lastname,
+        sex,
+        nationality_id,
+        birthday,
+        death_day,
+        age,
+        summary,
+        details,
+        biography,
+        remark,
+        show_order,
+        canceled,
+        uuid,
+        creator_id,
+        create_date,
+        create_time,
+        create_at,
+        modifier_id,
+        modify_date,
+        modify_time,
+        modify_at
+        from set_celebrity
+        <where>
+            id = #{id}
+        </where>
+    </select>
+    <select id="queryByIds" resultType="com.fanshr.step.engine.common.entity.Celebrity">
+        select id,lastname,summary,show_order from set_celebrity
+        <where>
+            <if test="ids!=null and ids!=''">
+                id in
+                <foreach collection="ids.split(',')" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="ids==null or ids==''">
+                1=2
+            </if>
+        </where>
+
+    </select>
+
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        insert into set_celebrity(lastname, sex, nationality_id, birthday, death_day, age, summary,
+                                  details, biography, remark, show_order, canceled, uuid, creator_id, create_date,
+                                  create_time,
+                                  create_at, modifier_id, modify_date, modify_time, modify_at)
+        values (#{lastname}, #{sex}, #{nationality_id}, #{birthday}, #{deathDay}, #{age}, #{summary},
+                #{details}, #{biography}, #{remark}, #{show_order}, #{canceled}, #{uuid}, #{creatorId}, #{createDate},
+                #{createTime},
+                #{createAt},
+                #{modifierId}, #{modifyDate}, #{modifyTime}, #{modifyAt})
+    </insert>
+
+
+    <update id="update" parameterType="com.fanshr.step.engine.common.entity.Celebrity">
+        update set_celebrity
+        <set>
+            <if test="lastname!=null">lastname=#{lastname},</if>
+            <if test="sex!=null">sex=#{sex},</if>
+            <if test="nationalityId!=null">nationality_id=#{nationalityId},</if>
+            <if test="birthday!=null">birthday=#{birthday},</if>
+            <if test="deathDay!=null">deathDay=#{deathDay},</if>
+            <if test="age!=null">age=#{age},</if>
+            <if test="summary!=null">summary=#{summary},</if>
+            <if test="details!=null">details=#{details},</if>
+            <if test="biography!=null">biography=#{biography},</if>
+            <if test="canceled!=null">canceled=#{canceled},</if>
+            <if test="remark!=null">remark=#{remark},</if>
+            <if test="showOrder!=null">show_order=#{showOrder},</if>
+            <if test="modifyAt!=null">modify_at=#{modifyAt},</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="delete">
+        delete
+        from set_celebrity
+        where id = #{id}
+    </delete>
+    <delete id="batchDelete" parameterType="int">
+        delete from set_celebrity where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
