@@ -7,6 +7,7 @@ import com.fanshr.step.engine.question.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.session.Configuration;
 
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book {
-
     private Integer id;
     private String isbn;
     private String title;

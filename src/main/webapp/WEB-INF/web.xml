@@ -12,9 +12,25 @@
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  <absolute-ordering/>
 
 
+  <!-- 1.启动Spring容器，加载配置文件 -->
+  <!--Spring配置： needed for ContextLoaderListener -->
+  <!--<context-param>-->
+  <!--  <param-name>contextConfigLocation</param-name>-->
+  <!--  <param-value>classpath:spring/spring-*.xml</param-value>-->
+  <!--</context-param>-->
 
+  <!-- Bootstraps the root web application context before servlet initialization -->
+  <!--spring监听器 启动服务器时,通过监听器加载spring运行环境-->
+  <!--<listener>-->
+  <!--  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+  <!--</listener>-->
+  <!--&lt;!&ndash;防止spring内存溢出监听器&ndash;&gt;-->
+  <!--<listener>-->
+  <!--  <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>-->
+  <!--</listener>-->
 
   <!-- 配置DispatcherServlet -->
   <servlet>
@@ -26,12 +42,49 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>classpath:spring/spring-*.xml</param-value>
     </init-param>
+    <!-- 设置启动级别 -->
+    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>Dispatcher</servlet-name>
     <!-- 默认匹配所有的请求 -->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+
+  <!-- 3.字符编码过滤器, 一定放在所有过滤器的前面 -->
+  <filter>
+    <filter-name>characterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <!-- 设置字符集 -->
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <!-- 是否需要字符编码过滤器设置请求编码, 设置的字符集为encoding -->
+      <param-name>forceRequestEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <!-- 是否需要字符编码过滤器设置响应编码, 设置的字符集为encoding -->
+      <param-name>forceResponseEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- 4.REST风格的URI -->
+  <!--<filter>-->
+  <!--  <filter-name>hiddenHttpMethodFilter</filter-name>-->
+  <!--  <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>-->
+  <!--</filter>-->
+  <!--<filter-mapping>-->
+  <!--  <filter-name>hiddenHttpMethodFilter</filter-name>-->
+  <!--  <url-pattern>/*</url-pattern>-->
+  <!--</filter-mapping>-->
 
 
   <!--  TODO:关于post回传中文乱码问题的处理-->

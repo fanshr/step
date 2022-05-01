@@ -2,6 +2,7 @@ package com.fanshr.step.engine.question.dao;
 
 import com.fanshr.step.engine.question.entity.QuestionItem;
 import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @date : Created at 2021/11/11 15:27
  * @date : Modified at 2021/11/11 15:27
  */
+@Mapper
 public interface QuestionItemDao {
 
     List<QuestionItem> queryList(@Param("condition") QuestionItem condition,

@@ -15,6 +15,8 @@ import java.util.List;
 
 public interface FieldTypeDao {
 
+
+
     List<FieldType> queryList(@Param("fieldTypeCondition") FieldType fieldTypeCondition);
     Page findByPage();
 

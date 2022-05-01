@@ -7,19 +7,8 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <context:component-scan base-package="com.**.dao"/>
 
-    <!-- 配置整合mybatis过程 -->
-    <!-- 1.配置数据库相关参数properties的属性：${url} -->
-    <!--<bean class="com.fanshr.step.util.EncryptPropertyPlaceholderConfigurer">-->
-    <!--    <property name="locations">-->
-    <!--        <list>-->
-    <!--            <value>classpath:jdbc.properties</value>-->
-    <!--            <value>classpath:redis.properties</value>-->
-    <!--        </list>-->
-    <!--    </property>-->
-    <!--    <property name="fileEncoding" value="UTF-8" />-->
-    <!--</bean>-->
-    <!--<context:property-placeholder location="classpath:jdbc.properties"/>-->
     <bean class="com.fanshr.step.engine.common.dao.split.EncryptPropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
@@ -31,65 +20,28 @@
         <property name="ignoreResourceNotFound" value="true"/>
     </bean>
 
-    <!--另一种实现加密的方式，待测试-->
-    <!--<bean id="placeholderConfigurer"-->
-    <!--      class="com.fanshr.step.engine.common.dao.split.DBPropertyPlaceholderConfigurer">-->
-    <!--    <property name="locations" value="classpath:jdbc.properties" />-->
-    <!--    <property name="encryptedProperties">-->
-    <!--        <array>-->
-    <!--            <value>jdbc.username</value>-->
-    <!--            <value>jdbc.password</value>-->
-    <!--        </array>-->
-    <!--    </property>-->
-    <!--</bean>-->
-    <!--<context:property-placeholder location="classpath:jdbc.properties" ignore-resource-not-found="true"/>-->
-
 
     <!-- 2.数据库连接池 -->
-    <bean id="abstractDataSource"  abstract="true" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+    <bean id="abstractDataSource"  abstract="true" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
 
 
-        <!-- c3p0连接池的私有属性 -->
-        <property name="maxPoolSize" value="10"/>
-        <property name="minPoolSize" value="5"/>
-        <!-- 关闭连接后不自动commit -->
-        <property name="autoCommitOnClose" value="false"/>
-        <!-- 获取连接超时时间 -->
-        <property name="checkoutTimeout" value="10000"/>
-        <!-- 当获取连接失败重试次数 -->
-        <property name="acquireRetryAttempts" value="3"/>
-
-
-        <!--因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的
- 时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable
- 等方法来提升连接测试的性能。Default: false -->
-        <!--<property name="testConnectionOnCheckout" value="true"/>-->
-        <!--每60秒检查所有连接池中的空闲连接。Default: 0 -->
-        <property name="idleConnectionTestPeriod" value="60"/>
-
-        <!--c3p0将建一张名为Test的空表，并使用其自带的查询语句进行测试。如果定义了这个参数那么
- 属性preferredTestQuery将被忽略。你不能在这张Test表上进行任何操作，它将只供c3p0测试
- 使用。Default: null-->
-        <property name="automaticTestTable" value="Test"/>
-
-        <!--定义所有连接测试都执行的测试语句。在使用连接测试的情况下这个一显著提高测试速度。注意：
- 测试的表必须在初始数据源的时候就存在。Default: null-->
-        <!--<property name="preferredTestQuery" value="select id from tmp_interview_item where id=1"/>-->
+        <property name="maxActive" value="10"/>
+        <property name="minIdle" value="5"/>
 
     </bean>
     <bean id="master" parent="abstractDataSource">
         <!-- 配置连接池属性 -->
-        <property name="driverClass" value="${jdbc.driver}"/>
-        <property name="jdbcUrl" value="${jdbc.master.url}"/>
-        <property name="user" value="${jdbc.username}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.master.url}"/>
+        <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
     <bean id="slave" parent="abstractDataSource">
         <!-- 配置连接池属性 -->
-        <property name="driverClass" value="${jdbc.driver}"/>
-        <property name="jdbcUrl" value="${jdbc.slave.url}"/>
-        <property name="user" value="${jdbc.username}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.slave.url}"/>
+        <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
     </bean>
     <!-- 配置动态数据源，targetDataSources 即路由数据源所对应的名称-->
@@ -107,40 +59,152 @@
         </property>
     </bean>
 
-    <!-- 3.配置SqlSessionFactory对象 -->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <!-- 注入数据库连接池 -->
+    <!--<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"-->
+    <!--      destroy-method="close">-->
+    <!--    <property name="driverClassName" value="${jdbc.driver}"/>-->
+    <!--    <property name="url" value="${jdbc.master.url}"/>-->
+    <!--    <property name="username" value="${jdbc.username}"/>-->
+    <!--    <property name="password" value="${jdbc.password}"/>-->
+    <!--    <property name="maxActive" value="10"/>-->
+    <!--    <property name="minIdle" value="5"/>-->
+    <!--</bean>-->
+
+    <!--这里使用MP提供的sqlSessionFactory，完成了Spring与MP的整合-->
+    <bean id="sqlSessionFactory"
+          class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <!-- 配置MyBaties全局配置文件:mybatis-config.xml -->
+        <!-- 全局策略-->
+        <property name="globalConfig" ref="globalConfig"/>
+
+        <!-- 指定全局配置文件的位置 -->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
-        <!-- 扫描entity包 使用别名 -->
+
+        <!-- 透传 mybatis 配置,继承自Mybatis原生配置 -->
+        <!--<property name="configuration" ref="configuration"/>-->
+
+
+        <!--指定Mapper接口映射的xml文件位置-->
+        <property name="mapperLocations" value="classpath*:**/dao/*.xml"/>
+
+        <!--映射别名-->
         <property name="typeAliasesPackage" value="com.fanshr.step.**.entity"/>
-        <!-- 扫描sql配置文件:mapper需要的xml文件 -->
-        <property name="mapperLocations" value="classpath*:dao/**/*.xml"/>
+
+        <!--插件配置-->
         <property name="plugins">
             <array>
-                <bean class="com.github.pagehelper.PageInterceptor">
-                    <property name="properties">
-                        <props>
-                            <!-- 设置 reasonable 为 true 表示将页码进行合理化修正。页码的有效范围：1~总页数 -->
-                            <prop key="reasonable">true</prop>
-                            <!-- 数据库方言：同样都是 SQL 语句，拿到不同数据库中，在语法上会有差异 -->
-                            <!-- 默认情况下，按照 MySQL 作为数据库方言来运行 -->
-                            <prop key="helperDialect">mysql</prop>
-                        </props>
-                    </property>
-                </bean>
+                <ref bean="mybatisPlusInterceptor"/>
             </array>
         </property>
 
 
     </bean>
 
-    <!-- 4.配置扫描Dao接口包，动态实现Dao接口，注入到spring容器中 -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!-- 注入sqlSessionFactory -->
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-        <!-- 给出需要扫描Dao接口包 -->
-        <property name="basePackage" value="com.fanshr.step.**.dao"/>
+
+    <bean id="configuration" class="com.baomidou.mybatisplus.core.MybatisConfiguration">
+        <!--驼峰命名映射-->
+        <property name="mapUnderscoreToCamelCase" value="true"/>
+
+
+        <!--<plugins>-->
+        <!--    <plugin interceptor="com.fanshr.step.engine.common.dao.split.DynamicDataSourceInterceptor"/>-->
+        <!--</plugins>-->
+
+
     </bean>
+
+
+    <bean id="mybatisPlusInterceptor" class="com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor">
+        <property name="interceptors">
+
+
+            <list>
+                <!--<ref bean="paginationInnerInterceptor"/>-->
+                <!--注册分页插件-->
+                <ref bean="paginationInnerInterceptor"/>
+                <ref bean="optimisticLockerInnerInterceptor"/>
+                <ref bean="blockAttackInnerInterceptor"/>
+
+                <!--注册执行分析插件,生产环境不建议使用-->
+                <!--<bean class="com.baomidou.mybatisplus.extension.plugins.SqlExplainInterceptor"/>-->
+                <!--<!–<property name="properties" ref="">–>-->
+
+                <!--<!–</property>–>-->
+                <!--</bean>-->
+
+
+
+
+            </list>
+        </property>
+    </bean>
+
+    <bean id="paginationInnerInterceptor" class="com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor">
+        <!-- 对于单一数据库类型来说,都建议配置该值,避免每次分页都去抓取数据库类型 -->
+
+        <property name="dbType" value="MYSQL"/>
+        <!--单页条数限制-->
+        <property name="maxLimit" value="1000"/>
+        <!--溢出总页数后，是否进行处理，默认不处理-->
+        <property name="overflow" value="false"/>
+    </bean>
+    <!--乐观锁插件-->
+    <bean id="optimisticLockerInnerInterceptor" class="com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor"/>
+    <!--防全表更新于删除插件-->
+    <bean id="blockAttackInnerInterceptor" class="com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor"/>
+    <bean id="globalConfig" class="com.baomidou.mybatisplus.core.config.GlobalConfig">
+        <!-- 控制台是否答应 字符logo图形-->
+        <property name="banner" value="false"/>
+        <!--sql全局注入-->
+        <!--<property name="sqlInjector" ref="mySqlInjector"/>-->
+
+        <!--元对象字段填充控制器-->
+        <!--<property name="metaObjectHandler" ref=""/>-->
+
+        <!--全局策略中的db策略配置-->
+        <property name="dbConfig" ref="dbConfig"/>
+
+
+    </bean>
+    <bean id="dbConfig" class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">
+        <!-- 全局的主键策略 -->
+        <property name="idType" value="AUTO"/>
+        <!-- 全局的表前缀策略配置 -->
+        <property name="tablePrefix" value="mbp_"/>
+
+        <!--全局的逻辑删除字段属性名-->
+        <property name="logicDeleteField" value="version"/>
+        <!--逻辑删除全局配值-->
+        <!--未删除-->
+        <property name="logicNotDeleteValue" value="0"/>
+        <!--已删除-->
+        <property name="logicDeleteValue" value="1"/>
+
+        <!--<!–注入自定义全局操作–>-->
+
+    </bean>
+
+    <!--
+    映射扫描,依然使用Mybatis原生的扫描器
+    扫描所有的mapper接口的实现，将mapper接口代理自动注入到Spring
+    base-package：指定mapper接口的包名
+    -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 指定mapper接口所在包 -->
+        <property name="basePackage" value="com.fanshr.step.**.dao"/>
+        <!--指定sqlSessionFactoryBean配置在Spring中的id值-->
+        <!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>-->
+        <property name="sqlSessionFactoryBeanName">
+            <idref bean="sqlSessionFactory"/>
+        </property>
+    </bean>
+    <!--另一种方式，需要使用 mybatis-spring命名空间-->
+    <!--<mybatis-spring:scan base-package="com.fanshr.case0101.dao"/>-->
+
+
+    <!--配置一个可以进行批量执行的sqlSession  -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <constructor-arg name="executorType" value="BATCH"/>
+    </bean>
+
 </beans>

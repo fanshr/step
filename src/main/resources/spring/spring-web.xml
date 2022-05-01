@@ -28,17 +28,55 @@
 
 
 
-
+    <!--启用spring的一些annotation -->
+    <context:annotation-config/>
 
     <!-- 配置SpringMVC -->
     <!-- 1.开启SpringMVC注解模式 -->
     <!-- 简化配置： (1)自动注册DefaultAnootationHandlerMapping,AnotationMethodHandlerAdapter
         (2)提供一些列：数据绑定，数字和日期的format @NumberFormat, @DateTimeFormat, xml,json默认读写支持 -->
-    <mvc:annotation-driven />
+    <!-- 能支持SpringMVC更高级的一些功能, JSR303校验, 快捷的ajax...映射动态请求 -->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 配置Fastjson支持 -->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+                <property name="features">
+                    <list>
+                        <!--<value>WriteMapNullValue</value>-->
+                        <value>WriteDateUseDateFormat</value>
+                        <value>QuoteFieldNames</value>
+                    </list>
+                </property>
+            </bean>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <!-- 2.静态资源默认servlet配置 (1)加入对静态资源的处理：js,gif,png (2)允许使用"/"做整体映射 -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
+
+    <!--将你的SwaggerConfig配置类注入-->
+    <bean class="com.fanshr.step.engine.common.config.SwaggerConfig"/>
+    <!--配置swagger资源不被拦截-->
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
+    <!-- 将SpringMVC不能处理的请求交给Tomcat -->
     <mvc:default-servlet-handler />
+
+    <!--<mvc:interceptors>-->
+
+    <!--</mvc:interceptors>-->
 
     <!-- 3.定义视图解析器 -->
     <bean id="viewResolver"
@@ -49,9 +87,14 @@
     <!-- 文件上传解析器 -->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="defaultEncoding" value="utf-8"></property>
-        <property name="maxUploadSize" value="10485760000"></property><!-- 最大上传文件大小 -->
-        <property name="maxInMemorySize" value="10960"></property>
+        <!--  默认编码  -->
+        <property name="defaultEncoding" value="utf-8"/>
+        <!--  文件大小最大值  -->
+        <property name="maxUploadSize" value="1024000"/>
+        <!--  内存中的最大值  -->
+        <property name="maxInMemorySize" value="40960"/>
+        <property name="resolveLazily" value="true"/>
+
     </bean>
     <!-- 在spring-mvc.xml文件中加入这段配置后，spring返回给页面的都是utf-8编码了 -->
     <!--<bean-->
@@ -70,7 +113,10 @@
     <!--    </property>-->
     <!--</bean>-->
     <!-- 4.扫描web相关的bean -->
-    <context:component-scan base-package="com.fanshr.step.api" />
+    <!-- 只扫描控制器 -->
+    <context:component-scan base-package="com.fanshr.step.*" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
     <!-- 5.权限拦截器 -->
     <!--<mvc:interceptors>-->
     <!--    <mvc:interceptor>-->
@@ -116,11 +162,7 @@
     <!--              class="com.fanshr.step.interceptor.superadmin.SuperAdminLoginInterceptor" />-->
     <!--    </mvc:interceptor>-->
 
-    <!--将你的SwaggerConfig配置类注入-->
-    <bean class="com.fanshr.step.engine.common.config.SwaggerConfig"/>
-    <!--配置swagger资源不被拦截-->
-    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
-    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
+
 
     <!--</mvc:interceptors>-->
 </beans>

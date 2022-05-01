@@ -1,6 +1,8 @@
 package com.fanshr.step.engine.question.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fanshr.step.engine.question.entity.Category;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * @date : Created at 2021/11/11 15:27
  * @date : Modified at 2021/11/11 15:27
  */
-
+@Mapper
 public interface CategoryDao {
 
     /**
