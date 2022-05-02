@@ -67,7 +67,7 @@
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <!--将你的SwaggerConfig配置类注入-->
-    <bean class="com.fanshr.step.engine.common.config.SwaggerConfig"/>
+    <bean class="com.fanshr.step.config.SwaggerConfig"/>
     <!--配置swagger资源不被拦截-->
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />

@@ -9,7 +9,7 @@
 
     <context:component-scan base-package="com.**.dao"/>
 
-    <bean class="com.fanshr.step.engine.common.dao.split.EncryptPropertyPlaceholderConfigurer">
+    <bean class="com.fanshr.step.config.split.EncryptPropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>classpath:jdbc.properties</value>
@@ -45,7 +45,7 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
     <!-- 配置动态数据源，targetDataSources 即路由数据源所对应的名称-->
-    <bean id="dynamicDataSource" class="com.fanshr.step.engine.common.dao.split.DynamicDataSource">
+    <bean id="dynamicDataSource" class="com.fanshr.step.config.split.DynamicDataSource">
         <property name="targetDataSources">
             <map>
                 <entry value-ref="master" key="master"/>
@@ -169,7 +169,7 @@
         <!-- 全局的主键策略 -->
         <property name="idType" value="AUTO"/>
         <!-- 全局的表前缀策略配置 -->
-        <property name="tablePrefix" value="mbp_"/>
+        <property name="tablePrefix" value="sys_"/>
 
         <!--全局的逻辑删除字段属性名-->
         <property name="logicDeleteField" value="version"/>

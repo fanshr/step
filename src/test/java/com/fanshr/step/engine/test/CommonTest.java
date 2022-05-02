@@ -1,6 +1,6 @@
 package com.fanshr.step.engine.test;
 
-import com.fanshr.step.engine.common.dao.split.DESUtil;
+import com.fanshr.step.config.split.DESUtil;
 import org.junit.Test;
 
 /**

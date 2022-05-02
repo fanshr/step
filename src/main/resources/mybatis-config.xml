@@ -17,7 +17,7 @@
   
 
     <plugins>
-        <plugin interceptor="com.fanshr.step.engine.common.dao.split.DynamicDataSourceInterceptor"/>
+        <plugin interceptor="com.fanshr.step.config.split.DynamicDataSourceInterceptor"/>
     </plugins>
 
 
