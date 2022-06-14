@@ -1,10 +1,9 @@
 package com.fanshr.step.engine.question.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.fanshr.step.engine.question.entity.Category;
+import com.fanshr.step.engine.question.domain.entity.Category;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * @date : Modified at 2021/11/11 15:27
  */
 @Mapper
-public interface CategoryDao {
+public interface CategoryDao extends BaseMapper<Category> {
 
     /**
      * 传入id时，取所有的一级类别

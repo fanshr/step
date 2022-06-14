@@ -5,7 +5,7 @@
 <mapper namespace="com.fanshr.step.engine.question.dao.TagDao">
 
 
-    <select id="queryList" resultType="com.fanshr.step.engine.question.entity.Tag">
+    <select id="queryList" resultType="com.fanshr.step.engine.question.domain.entity.QuestionTag">
         select id, title, description, frequency, percentage, parent_id, remark, is_disable, is_cancel, show_order,
         module_id, uuid, creator_id, create_date, create_time, create_at, modifier_id, modify_date, modify_time,
         modify_at
@@ -25,7 +25,7 @@
 
 
     </select>
-    <select id="queryOne" resultType="com.fanshr.step.engine.question.entity.Tag">
+    <select id="queryOne" resultType="com.fanshr.step.engine.question.domain.entity.QuestionTag">
         select id, title, description, frequency, percentage, parent_id, remark, is_disable, is_cancel, show_order,
         module_id, uuid, creator_id, create_date, create_time, create_at, modifier_id, modify_date, modify_time,
         modify_at
@@ -34,7 +34,7 @@
             id = #{id}
         </where>
     </select>
-    <select id="queryByIds" resultType="com.fanshr.step.engine.question.entity.Tag">
+    <select id="queryByIds" resultType="com.fanshr.step.engine.question.domain.entity.QuestionTag">
         select id,title,description,remark,show_order from tmp_interview_tag
         <where>
             <if test="ids!=null and ids!=''">
@@ -62,7 +62,7 @@
     </insert>
 
 
-    <update id="update" parameterType="com.fanshr.step.engine.question.entity.Tag">
+    <update id="update" parameterType="com.fanshr.step.engine.question.domain.entity.QuestionTag">
         update tmp_interview_tag
         <set>
             <if test="title!=null">title=#{title},</if>

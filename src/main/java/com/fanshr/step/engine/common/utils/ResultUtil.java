@@ -54,8 +54,8 @@ public class ResultUtil {
     public static <T> Result<T> success(String msg, T payload) {
         Result<T> result = new Result<>();
         result.setSuccess(true);
-        result.setErrorCode(ErrorCode.SUCCESS.getState());
-        msg = msg == null ? ErrorCode.SUCCESS.getMsg() : msg;
+        result.setErrorCode(ErrorCode.SUCCESS.code());
+        msg = msg == null ? ErrorCode.SUCCESS.msg() : msg;
         result.setErrorMessage(msg);
         result.setData(payload);
         return result;
@@ -120,8 +120,8 @@ public class ResultUtil {
     public static <T> Result<T> error(ErrorCode code, String msg, T payload) {
         Result<T> result = new Result<>();
         result.setSuccess(false);
-        result.setErrorCode(code.getState());
-        msg = msg == null ? code.getMsg() : msg;
+        result.setErrorCode(code.code());
+        msg = msg == null ? code.msg() : msg;
         result.setErrorMessage(msg);
         result.setData(payload);
         return result;
@@ -147,8 +147,8 @@ public class ResultUtil {
     public static <T> Result<T> error(ErrorCode code, String msg, int showType,String traceId,String host) {
         Result<T> result = new Result<>();
         result.setSuccess(false);
-        result.setErrorCode(code.getState());
-        msg = msg == null ? code.getMsg() : msg;
+        result.setErrorCode(code.code());
+        msg = msg == null ? code.msg() : msg;
         result.setErrorMessage(msg);
         result.setShowType(showType);
         result.setTraceId(traceId);

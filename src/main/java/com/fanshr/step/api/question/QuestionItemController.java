@@ -3,21 +3,18 @@ package com.fanshr.step.api.question;
 import com.fanshr.step.engine.common.dto.Execution;
 import com.fanshr.step.engine.common.dto.PageBean;
 import com.fanshr.step.engine.common.dto.Result;
-import com.fanshr.step.engine.question.entity.QuestionItem;
 import com.fanshr.step.engine.common.enums.ErrorCode;
 import com.fanshr.step.engine.common.enums.StateEnum;
-import com.fanshr.step.engine.question.service.QuestionItemService;
 import com.fanshr.step.engine.common.utils.ParamUtil;
 import com.fanshr.step.engine.common.utils.ResultUtil;
+import com.fanshr.step.engine.question.domain.entity.QuestionItem;
+import com.fanshr.step.engine.question.service.QuestionItemService;
 import com.fanshr.step.engine.question.utils.StringUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,8 +27,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/question/item/")
+@Slf4j
 public class QuestionItemController {
-    private static final Logger logger = LoggerFactory.getLogger(QuestionItemController.class);
 
 
     @Autowired
@@ -73,7 +70,7 @@ public class QuestionItemController {
     public Result<PageBean> list(@RequestBody QuestionItem condition,
                                  @RequestParam(required = true, defaultValue = "1") Integer current,
                                  @RequestParam(required = true, defaultValue = "10") Integer pageSize) {
-        logger.info("关键参数-->{}--{}--{}", current, pageSize, condition);
+        log.info("关键参数-->{}--{}--{}", current, pageSize, condition);
 
         try {
             condition.setTitle(StringUtil.toCondition(condition.getTitle()));
@@ -123,7 +120,7 @@ public class QuestionItemController {
                 return ResultUtil.error(e.toString());
             }
         } else {
-            return ResultUtil.error(ErrorCode.DATA_IS_NULL);
+            return ResultUtil.error(ErrorCode.PARAM_IS_BLANK);
         }
     }
 
@@ -167,7 +164,7 @@ public class QuestionItemController {
                 return ResultUtil.error(execution.getStateInfo());
             }
         } else {
-            return ResultUtil.error(ErrorCode.DATA_IS_NULL);
+            return ResultUtil.error(ErrorCode.PARAM_IS_BLANK);
         }
     }
 
@@ -188,7 +185,7 @@ public class QuestionItemController {
             }
 
         } else {
-            return ResultUtil.error(ErrorCode.EMPTY);
+            return ResultUtil.error(ErrorCode.PARAM_IS_EMPTY);
         }
     }
 }

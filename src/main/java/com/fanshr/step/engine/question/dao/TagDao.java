@@ -1,6 +1,7 @@
 package com.fanshr.step.engine.question.dao;
 
-import com.fanshr.step.engine.question.entity.Tag;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.fanshr.step.engine.question.domain.entity.QuestionTag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,17 +14,17 @@ import java.util.List;
  * @date : Modified at 2021/11/11 15:27
  */
 @Mapper
-public interface TagDao {
+public interface TagDao extends BaseMapper<QuestionTag> {
 
-    List<Tag> queryList(@Param("condition") Tag condition);
-    List<Tag> queryByIds(@Param("ids") String ids);
+    List<QuestionTag> queryList(@Param("condition") QuestionTag condition);
+    List<QuestionTag> queryByIds(@Param("ids") String ids);
 
 
-    Tag queryOne(Integer id);
+    QuestionTag queryOne(Integer id);
 
-    int insert(Tag tag);
+    int insert(QuestionTag questionTag);
 
-    int update(Tag tag);
+    int update(QuestionTag questionTag);
 
     int delete(Integer id);
     int batchDelete(List<Integer> idList);

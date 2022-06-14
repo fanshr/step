@@ -1,11 +1,11 @@
 package com.fanshr.step.engine.question.service.impl;
 
-import com.fanshr.step.engine.question.dao.QuestionItemDao;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fanshr.step.engine.common.dto.Execution;
-import com.fanshr.step.engine.question.entity.QuestionItem;
 import com.fanshr.step.engine.common.enums.StateEnum;
+import com.fanshr.step.engine.question.dao.QuestionItemDao;
+import com.fanshr.step.engine.question.domain.entity.QuestionItem;
 import com.fanshr.step.engine.question.service.QuestionItemService;
-import com.fanshr.step.engine.common.utils.PageUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.List;
  * @date : Modified at 2022/2/7 20:49
  */
 @Service
-public class QuestionItemServiceImpl implements QuestionItemService {
+public class QuestionItemServiceImpl extends ServiceImpl<QuestionItemDao,QuestionItem> implements QuestionItemService {
     @Autowired
     QuestionItemDao questionItemDao;
 
@@ -62,7 +62,7 @@ public class QuestionItemServiceImpl implements QuestionItemService {
     @Transactional
     public Execution add(QuestionItem questionItem) {
         if (questionItem == null) {
-            return new Execution(StateEnum.EMPTY);
+            return new Execution(StateEnum.PARAM_IS_EMPTY);
         }
 
         try {
@@ -85,7 +85,7 @@ public class QuestionItemServiceImpl implements QuestionItemService {
     @Transactional
     public Execution modify(QuestionItem questionItem) {
         if (questionItem == null) {
-            return new Execution(StateEnum.EMPTY);
+            return new Execution(StateEnum.PARAM_IS_EMPTY);
         }
 
         try {
@@ -105,7 +105,7 @@ public class QuestionItemServiceImpl implements QuestionItemService {
     @Transactional
     public Execution remove(Integer id) {
         if (id == null || id <= 0) {
-            return new Execution(StateEnum.EMPTY);
+            return new Execution(StateEnum.PARAM_IS_EMPTY);
         }
 
         try {
@@ -124,7 +124,7 @@ public class QuestionItemServiceImpl implements QuestionItemService {
     @Transactional
     public Execution multiRemove(List<Integer> idList) {
         if (idList == null || idList.size() <= 0) {
-            return new Execution(StateEnum.EMPTY);
+            return new Execution(StateEnum.PARAM_IS_EMPTY);
         }
         try {
             int effectedRows = questionItemDao.batchDelete(idList);

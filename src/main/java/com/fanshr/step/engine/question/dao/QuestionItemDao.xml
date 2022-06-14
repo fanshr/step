@@ -5,7 +5,7 @@
 <mapper namespace="com.fanshr.step.engine.question.dao.QuestionItemDao">
 
 
-    <resultMap id="itemMap" type="com.fanshr.step.engine.question.entity.QuestionItem">
+    <resultMap id="itemMap" type="com.fanshr.step.engine.question.domain.entity.QuestionItem">
         <id column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="description" property="description"/>
@@ -24,7 +24,7 @@
         <result column="category_id" property="categoryId"/>
         <result column="tags" property="tags"/>
 
-        <association property="category" javaType="com.fanshr.step.engine.question.entity.Category"
+        <association property="category" javaType="com.fanshr.step.engine.question.domain.entity.Category"
                      select="com.fanshr.step.engine.question.dao.CategoryDao.queryOne" column="{id = category_id}"/>
         <!--    <id column="category_id" property="id"/>-->
         <!--    <result column="title" property="title"/>-->
@@ -35,7 +35,7 @@
         <!--    <result column="modify_at" property="modifyAt"/>-->
         <!--</association>-->
 
-        <collection property="tagList" javaType="java.util.ArrayList" ofType="com.fanshr.step.engine.question.entity.Tag"
+        <collection property="tagList" javaType="java.util.ArrayList" ofType="com.fanshr.step.engine.question.domain.entity.QuestionTag"
                     select="com.fanshr.step.engine.question.dao.TagDao.queryByIds" column="{ids=tags}"/>
         <!--    <id column="tag_id" property="id"/>-->
         <!--    <result column="tag_title" property="title"/>-->
@@ -157,7 +157,7 @@ order by show_order
 
     </insert>
 
-    <update id="update" parameterType="com.fanshr.step.engine.question.entity.QuestionItem">
+    <update id="update" parameterType="com.fanshr.step.engine.question.domain.entity.QuestionItem">
         update tmp_interview_item
         <set>
             <if test="title!=null">title=#{title},</if>

@@ -42,7 +42,7 @@
         <!--    <result column="create_at" property="createAt"/>-->
         <!--    <result column="modify_at" property="modifyAt"/>-->
         <!--</association>-->
-        <association property="language" javaType="com.fanshr.step.engine.common.entity.Language">
+        <association property="language" javaType="com.fanshr.step.engine.core.domain.entity.Locale">
             <id column="language_id" property="id"/>
             <result column="description" property="description"/>
             <result column="flag" property="flag"/>

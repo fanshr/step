@@ -1,7 +1,7 @@
 package com.fanshr.step.engine.security.service;
 
-import com.fanshr.step.engine.security.entity.RightGroup;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fanshr.step.engine.security.domain.entity.RightGroup;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author LiuYJ
- * @since 2022-05-02
+ * @since 2022-06-13
  */
 public interface RightGroupService extends IService<RightGroup> {
 

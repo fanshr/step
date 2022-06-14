@@ -5,7 +5,7 @@
 <mapper namespace="com.fanshr.step.engine.question.dao.CategoryDao">
 
 
-    <select id="queryList" resultType="com.fanshr.step.engine.question.entity.Category">
+    <select id="queryList" resultType="com.fanshr.step.engine.question.domain.entity.Category">
         select id,
         title,
         description,
@@ -42,7 +42,7 @@
 
 
     </select>
-    <select id="queryOne" resultType="com.fanshr.step.engine.question.entity.Category">
+    <select id="queryOne" resultType="com.fanshr.step.engine.question.domain.entity.Category">
         select id,
         title,
         description,
@@ -78,7 +78,7 @@
     </insert>
 
 
-    <update id="update" parameterType="com.fanshr.step.engine.question.entity.Category">
+    <update id="update" parameterType="com.fanshr.step.engine.question.domain.entity.Category">
         update tmp_interview_category
         <set>
             <if test="title!=null">title=#{title},</if>

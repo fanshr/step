@@ -1,5 +1,7 @@
 package com.fanshr.step.config;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -15,6 +17,9 @@ import java.util.EnumSet;
  * @date : Created at 2022/4/30 20:36
  * @date : Modified at 2022/4/30 20:36
  */
+@Configuration
+@ComponentScan(basePackages = "com.fanshr.step.*")
+// @ComponentScan(basePackages = "com.fanshr.step.**.dao")
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 

@@ -1,7 +1,8 @@
 package com.fanshr.step.engine.question.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.fanshr.step.engine.common.dto.Execution;
-import com.fanshr.step.engine.question.entity.QuestionItem;
+import com.fanshr.step.engine.question.domain.entity.QuestionItem;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @date : Created at 2022/2/7 20:49
  * @date : Modified at 2022/2/7 20:49
  */
-public interface QuestionItemService {
+public interface QuestionItemService  extends IService<QuestionItem> {
 
 
     public Execution list(QuestionItem condition, int current, int pageSize);

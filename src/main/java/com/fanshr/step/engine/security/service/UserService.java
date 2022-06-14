@@ -1,6 +1,6 @@
 package com.fanshr.step.engine.security.service;
 
-import com.fanshr.step.engine.security.entity.User;
+import com.fanshr.step.engine.security.domain.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

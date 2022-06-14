@@ -1,9 +1,9 @@
 package com.fanshr.step.engine.security.service.impl;
 
-import com.fanshr.step.engine.security.entity.Right;
-import com.fanshr.step.engine.security.mapper.RightMapper;
-import com.fanshr.step.engine.security.service.RightService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fanshr.step.engine.security.domain.entity.Right;
+import com.fanshr.step.engine.security.dao.RightMapper;
+import com.fanshr.step.engine.security.service.RightService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author LiuYJ
- * @since 2022-05-02
+ * @since 2022-06-13
  */
 @Service
 public class RightServiceImpl extends ServiceImpl<RightMapper, Right> implements RightService {

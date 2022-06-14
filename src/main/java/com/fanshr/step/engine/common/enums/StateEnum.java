@@ -13,7 +13,7 @@ public enum StateEnum {
 
     SUCCESS(1, "操作成功"),
     INNER_ERROR(0, "操作失败"),
-    EMPTY(-1, "关键信息为空");
+    PARAM_IS_EMPTY(-1, "关键信息为空");
 
     private int state;
     private String stateInfo;

@@ -1,11 +1,11 @@
 package com.fanshr.step.engine.question.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fanshr.step.engine.question.dao.CategoryDao;
 import com.fanshr.step.engine.common.dto.Execution;
-import com.fanshr.step.engine.question.entity.Category;
+import com.fanshr.step.engine.question.domain.entity.Category;
 import com.fanshr.step.engine.common.enums.StateEnum;
 import com.fanshr.step.engine.question.service.CategoryService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl extends ServiceImpl<CategoryDao,Category> implements CategoryService {
 
     @Autowired
     private CategoryDao categoryDao;
@@ -64,7 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
         } else {
 
 
-            return new Execution(StateEnum.EMPTY);
+            return new Execution(StateEnum.PARAM_IS_EMPTY);
         }
     }
 
@@ -88,7 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
             }
 
         } else {
-            return new Execution(StateEnum.EMPTY);
+            return new Execution(StateEnum.PARAM_IS_EMPTY);
         }
     }
 
@@ -110,7 +110,7 @@ public class CategoryServiceImpl implements CategoryService {
             }
 
         } else {
-            return new Execution(StateEnum.EMPTY);
+            return new Execution(StateEnum.PARAM_IS_EMPTY);
         }
     }
 
@@ -132,7 +132,7 @@ public class CategoryServiceImpl implements CategoryService {
             }
 
         } else {
-            return new Execution(StateEnum.EMPTY);
+            return new Execution(StateEnum.PARAM_IS_EMPTY);
         }
     }
 }

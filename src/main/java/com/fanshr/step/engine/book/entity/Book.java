@@ -1,13 +1,11 @@
 package com.fanshr.step.engine.book.entity;
 
 import com.fanshr.step.engine.common.entity.Celebrity;
-import com.fanshr.step.engine.common.entity.Language;
-import com.fanshr.step.engine.question.entity.Category;
-import com.fanshr.step.engine.question.entity.Tag;
+
+import com.fanshr.step.engine.core.domain.entity.Locale;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.session.Configuration;
 
 import java.util.Date;
 import java.util.List;
@@ -48,7 +46,7 @@ public class Book {
     private Date modifyAt;
 
     private BookType bookType;
-    private Language language;
+    private Locale language;
     private List<Celebrity> authorList;
     private List<Celebrity> translatorList;
 }

@@ -1,7 +1,7 @@
 package com.fanshr.step.engine.question.dao;
 
 import com.fanshr.step.engine.BaseTest;
-import com.fanshr.step.engine.question.entity.Category;
+import com.fanshr.step.engine.question.domain.entity.Category;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

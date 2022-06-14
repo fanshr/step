@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 
 @EnableWebMvc
-@ComponentScan(basePackages = "com.fanshr.step",
+@ComponentScan(basePackages = "com.fanshr.step.*",
 includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION,value = Controller.class)})
 public class AppConfig implements WebMvcConfigurer {
 
@@ -53,6 +53,9 @@ public class AppConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("redirect:/login");
+
+        // registry.addViewController("/").setViewName("redirect:/login-view");
+        // registry.addViewController("/login-view").setViewName("login");
     }
 
 

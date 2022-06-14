@@ -1,9 +1,9 @@
 package com.fanshr.step.engine.security.service.impl;
 
-import com.fanshr.step.engine.security.entity.User;
-import com.fanshr.step.engine.security.mapper.UserMapper;
-import com.fanshr.step.engine.security.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fanshr.step.engine.security.domain.entity.User;
+import com.fanshr.step.engine.security.dao.UserMapper;
+import com.fanshr.step.engine.security.service.UserService;
 import org.springframework.stereotype.Service;
 
 /**

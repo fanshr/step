@@ -2,9 +2,9 @@ package com.fanshr.step.api.test;
 
 import com.alibaba.fastjson.JSON;
 import com.fanshr.step.engine.common.dto.Result;
-import com.fanshr.step.engine.question.entity.Category;
+import com.fanshr.step.engine.question.domain.entity.Category;
 import com.fanshr.step.engine.common.utils.ResultUtil;
-import com.fanshr.step.engine.question.entity.QuestionItem;
+import com.fanshr.step.engine.question.domain.entity.QuestionItem;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

@@ -4,16 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.fanshr.step.engine.common.dto.Execution;
 import com.fanshr.step.engine.common.dto.PageBean;
 import com.fanshr.step.engine.common.dto.Result;
-import com.fanshr.step.engine.question.entity.Category;
 import com.fanshr.step.engine.common.enums.ErrorCode;
 import com.fanshr.step.engine.common.enums.StateEnum;
-import com.fanshr.step.engine.question.service.CategoryService;
 import com.fanshr.step.engine.common.utils.ParamUtil;
 import com.fanshr.step.engine.common.utils.ResultUtil;
+import com.fanshr.step.engine.question.domain.entity.Category;
+import com.fanshr.step.engine.question.service.CategoryService;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +34,8 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/question/category/")
+@Slf4j
 public class CategoryController {
-    private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
 
 
     @Autowired
@@ -93,13 +92,13 @@ public class CategoryController {
         String interviewCategoryStr = ParamUtil.getString(request, "interviewCategoryStr");
 
         System.out.println("参数"+interviewCategoryStr);
-        logger.info("参数-->{}",interviewCategoryStr);
+        log.info("参数-->{}",interviewCategoryStr);
 
         try {
             category = mapper.readValue(interviewCategoryStr, Category.class);
         } catch (Exception e) {
-            logger.error("解析异常-->{}",e.toString());
-            return ResultUtil.error(ErrorCode.INVALID_PARAM, e.toString());
+            log.error("解析异常-->{}",e.toString());
+            return ResultUtil.error(ErrorCode.PARAM_FORMAT_ERROR, e.toString());
         }
 
         if (category != null) {
@@ -122,7 +121,7 @@ public class CategoryController {
                 return ResultUtil.error(e.toString());
             }
         } else {
-            return ResultUtil.error(ErrorCode.DATA_IS_NULL);
+            return ResultUtil.error(ErrorCode.PARAM_IS_BLANK);
         }
     }
 
@@ -137,7 +136,7 @@ public class CategoryController {
         try {
             category = mapper.readValue(interviewCategoryStr, Category.class);
         } catch (Exception e) {
-            return ResultUtil.error(ErrorCode.INVALID_PARAM, e.toString());
+            return ResultUtil.error(ErrorCode.PARAM_FORMAT_ERROR, e.toString());
         }
 
         if (category != null && category.getId() != null) {
@@ -177,7 +176,7 @@ public class CategoryController {
                 return ResultUtil.error(execution.getStateInfo());
             }
         } else {
-            return ResultUtil.error(ErrorCode.DATA_IS_NULL);
+            return ResultUtil.error(ErrorCode.PARAM_IS_BLANK);
         }
     }
 
@@ -194,7 +193,7 @@ public class CategoryController {
             interviewCategoryIdList = mapper.readValue(interviewCategoryIdListStr, javaType);
         } catch (IOException e) {
 
-            return ResultUtil.error(ErrorCode.INVALID_PARAM, e.toString());
+            return ResultUtil.error(ErrorCode.PARAM_FORMAT_ERROR, e.toString());
         }
 
         if (interviewCategoryIdList != null && interviewCategoryIdList.size() > 0) {
@@ -207,7 +206,7 @@ public class CategoryController {
             }
 
         } else {
-            return ResultUtil.error(ErrorCode.EMPTY);
+            return ResultUtil.error(ErrorCode.PARAM_IS_EMPTY);
         }
     }
 
@@ -234,7 +233,7 @@ public class CategoryController {
     private Result save2(@RequestBody Category category) {
         System.out.println("参数"+JSON.toJSONString(category));
         System.out.println("对象"+ category);
-        logger.error("参数-->{}",JSON.toJSONString(category));
+        log.error("参数-->{}",JSON.toJSONString(category));
 
         return ResultUtil.success();
 
@@ -245,7 +244,7 @@ public class CategoryController {
     private Result save3(String title, @RequestParam(value = "description",required = false) String desc, String remark, Double showOrder) {
 
         System.out.println("关键参数-->"+title+"--"+desc+"--"+remark+"--"+showOrder);
-        logger.error("关键参数--->{}--{}--{}--{}",title,desc,remark,showOrder);
+        log.error("关键参数--->{}--{}--{}--{}",title,desc,remark,showOrder);
 
 
 
@@ -259,7 +258,7 @@ public class CategoryController {
 
 
         System.out.println("参数"+JSON.toJSONString(category));
-        logger.error("参数-->{}",JSON.toJSONString(category));
+        log.error("参数-->{}",JSON.toJSONString(category));
 
         return ResultUtil.success();
     }

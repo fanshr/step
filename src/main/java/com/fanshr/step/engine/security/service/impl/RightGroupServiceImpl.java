@@ -1,9 +1,9 @@
 package com.fanshr.step.engine.security.service.impl;
 
-import com.fanshr.step.engine.security.entity.RightGroup;
-import com.fanshr.step.engine.security.mapper.RightGroupMapper;
-import com.fanshr.step.engine.security.service.RightGroupService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fanshr.step.engine.security.domain.entity.RightGroup;
+import com.fanshr.step.engine.security.dao.RightGroupMapper;
+import com.fanshr.step.engine.security.service.RightGroupService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author LiuYJ
- * @since 2022-05-02
+ * @since 2022-06-13
  */
 @Service
 public class RightGroupServiceImpl extends ServiceImpl<RightGroupMapper, RightGroup> implements RightGroupService {

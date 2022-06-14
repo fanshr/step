@@ -1,6 +1,7 @@
 package com.fanshr.step.engine.question.dao;
 
-import com.fanshr.step.engine.question.entity.QuestionItem;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.fanshr.step.engine.question.domain.entity.QuestionItem;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +16,7 @@ import java.util.List;
  * @date : Modified at 2021/11/11 15:27
  */
 @Mapper
-public interface QuestionItemDao {
+public interface QuestionItemDao extends BaseMapper<QuestionItem> {
 
     List<QuestionItem> queryList(@Param("condition") QuestionItem condition,
                                  @Param("rowIndex") Integer rowIndex, @Param("pageSize") Integer pageSize);

@@ -2,15 +2,13 @@ package com.fanshr.step.engine.question.dao;
 
 import com.alibaba.fastjson.JSON;
 import com.fanshr.step.engine.BaseTest;
-import com.fanshr.step.engine.question.entity.QuestionItem;
-import com.github.pagehelper.Page;
+import com.fanshr.step.engine.question.domain.entity.QuestionItem;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.locks.Condition;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
